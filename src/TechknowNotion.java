@@ -35,6 +35,15 @@ class FileHandling {
         return first_list;
     }
 
+    static void csvWriting(String filename) throws IOException {
+        File f = new File(filename);
+        if (!f.exists()) {
+            CSVWriter cw = new CSVWriter(new FileWriter(filename));
+            cw.writeNext(new String[]{"Modules","Type","No. of Tasks", "Priority"});
+            cw.close();
+        }
+    }
+
     static void csvWriting(String filename, List<String[]> queue_list, String[] arr, List<Tasks> sort_list) throws IOException {
         CSVWriter cw = new CSVWriter(new FileWriter(filename));
         queue_list.add(arr);
@@ -444,28 +453,10 @@ public class TechknowNotion {
     }
 
     static void make_csv_files() throws IOException {
-        File f = new File("all_modules.csv");
-        if (!f.exists()) {
-            CSVWriter cw = new CSVWriter(new FileWriter("all_modules.csv"));
-            cw.writeNext(new String[]{"Modules","Type","No. of Tasks", "Priority"});
-            cw.close();
-        }
-
-        File f2 = new File("completed_modules.csv");
-        if (!f2.exists()) {
-            CSVWriter cw3 = new CSVWriter(new FileWriter("completed_modules.csv"));
-            cw3.writeNext(new String[]{"Modules","Type","No. of Tasks", "Priority"});
-            cw3.close();
-        }
-
-        File f3 = new File("queue.csv");
-        if (!f3.exists()) {
-            CSVWriter cw2 = new CSVWriter(new FileWriter("queue.csv"));
-            cw2.writeNext(new String[]{"Modules","Type","No. of Tasks", "Priority"});
-            cw2.close();
-        }
+        FileHandling.csvWriting("all_modules.csv");
+        FileHandling.csvWriting("completed_modules.csv");
+        FileHandling.csvWriting("queue.csv");
     }
-
 
     public static void main(String[] args) throws IOException, InterruptedException {
         make_csv_files();
