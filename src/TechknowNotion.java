@@ -4,7 +4,7 @@ import com.opencsv.CSVWriter;
 import java.io.*;
 import java.util.*;
 
-//DONE
+// class for displaying
 class Preview {
     public List<Object> lst1;
 
@@ -16,19 +16,57 @@ class Preview {
         this.lst1 = lst1;
     }
 
+    //displays the list
     void view2() {
         System.out.println(this.lst1.get(0) + "\t       " + this.lst1.get(1) +
                 "\t\t\t   " + this.lst1.get(2) + "\t\t\t\t  " + this.lst1.get(3));
     }
 }
 
+class FileHandling {
+    static List<String[]> csvReading(String filename) throws IOException {
+        CSVReader cr = new CSVReader(new FileReader(filename));
+        ArrayList<String[]> first_list = new ArrayList<>();
+        String[] second_list;
+        while ((second_list = cr.readNext()) != null) {
+            first_list.add(second_list);
+        }
+        cr.close();
+        return first_list;
+    }
+
+    static void csvWriting(String filename, List<String[]> queue_list, String[] arr, List<Tasks> sort_list) throws IOException {
+        CSVWriter cw = new CSVWriter(new FileWriter(filename));
+        queue_list.add(arr);
+        for (int i = 0; i < sort_list.size(); i++) {
+            queue_list.add(new String[]{sort_list.get(i).module_name, sort_list.get(i).type,
+                    String.valueOf(sort_list.get(i).no_task), String.valueOf(sort_list.get(i).priority)});
+        }
+        cw.writeAll(queue_list);
+        cw.close();
+    }
+
+    static void csvWriting(String filename, List<String[]> first_list, String[] arr) throws IOException {
+        CSVWriter cw = new CSVWriter(new FileWriter(filename));
+        first_list.add(arr);
+        cw.writeAll(first_list);
+        cw.close();
+    }
+
+    static void csvWriting(String filename, List<String[]> collect_list) throws IOException {
+        CSVWriter cw = new CSVWriter(new FileWriter(filename));
+        cw.writeAll(collect_list);
+        cw.close();
+    }
+}
+
 class OtherFunctions {
 
-    //DONE
-    void iteration(ArrayList<String[]> ln) {
+    // iterates through the list
+    void iteration(List<String[]> ln) {
         System.out.println("Modules\t\t\tType\t\t\tNo. of Tasks\t\t\tPriority");
         for (int x = 0; x < ln.size(); x++) { // iterate per row
-            List<Object> list4 = new ArrayList<>();
+            List<Object> list4;
             if (x == 0) {
                 continue; // skip header
             }
@@ -40,7 +78,7 @@ class OtherFunctions {
         }
     }
 
-    // DONE check if functioning right
+    // checks if .csv file is empty
     Boolean is_empty(String x) throws IOException {
         CSVReader cr = new CSVReader(new FileReader(x));
         ArrayList<String[]> first_list = new ArrayList<>();
@@ -49,85 +87,87 @@ class OtherFunctions {
             first_list.add(second_list);
         }
 
-        if (first_list.size() == 1) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return first_list.size() != 1;
     }
 
-    //NOT DONE - unknown
+    // asks if user wants to go back to menu of the current location
     void try_again(String ques, String msg, int loc){
         while (true){
             try {
-                TechknowNotion p = new TechknowNotion();
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                System.out.printf("%s YES(1) or NO(0):", ques);
+                System.out.printf("%s YES(1) or NO(0): ", ques);
                 int choice = Integer.parseInt(br.readLine());
                 if (choice == 0){
                     restart();
                 }
                 else if (choice == 1){
                     if (loc == 1){
-                        p.input_module_details();
+                        TechknowNotion.input_module_details();
                     } else if (loc == 2){
-                        p.view_module();
+                        TechknowNotion.view_module();
                     } else if (loc == 3){
-                        p.schedule_module();
+                        TechknowNotion.schedule_module();
                     } else if (loc == 4){
-                        p.get_a_module();
+                        TechknowNotion.get_a_module();
+                    }
+                    else {
+                        System.out.println("Invalid input.");
                     }
                 }
-            } catch (Exception e ) {
+                else {
+                    System.out.println("Invalid input.");
+                }
+            } catch (IOException | InterruptedException | NumberFormatException e ) {
                 System.out.println(msg);
             }
         }
     }
 
-    //NOT DONE - unknown
+    // asks if user want to go back to main menu
     void restart() {
         while (true) {
             try {
-                TechknowNotion p = new TechknowNotion();
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                System.out.println("\nGo back to main menu? YES(1) or NO(0): ");
+                System.out.print("\nGo back to main menu? YES(1) or NO(0): ");
                 int choice = Integer.parseInt(br.readLine());
                 if (choice == 0) {
                     System.exit(0);
                 }
                 else if (choice == 1) {
-                    p.main2();
+                    TechknowNotion.main2();
                 }
                 else {
-                    System.out.println("Invalid Input");
+                    System.out.println("Invalid input.");
                 }
             }
-            catch (Exception e) {}
+            catch (IOException | InterruptedException | NumberFormatException e) {
+                System.out.println("Invalid input.");
+            }
         }
     }
 
-    //DONE
+    // checks if input is a positive integer
     int input_validation(String msg){
         while (true){
             try {
-                System.out.println(msg);
+                System.out.print(msg);
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 int i = Integer.parseInt(br.readLine());
                 if (i < 1){
-                    System.out.println("Input must positive integer\n");
+                    System.out.println("Invalid input.\n");
                 }
                 else {
                     return  i;
                 }
 
             } catch (InputMismatchException | IOException | NumberFormatException e){
-                System.out.println("Input must positive integer\n");
+                System.out.println("Invalid input.\n");
             }
         }
     }
 }
 
+// a tasks class that shows its attributes needed for comparator comparing
 class Tasks {
     String module_name;
     String type;
@@ -149,57 +189,54 @@ class Tasks {
     public int getPriority() {
         return priority;
     }
-
-    @Override
-    public String toString() {
-        return "Tasks [module name=" + module_name + ", type=" + type + ", no. of task=" + no_task + ", priority= " + priority + "]";
-    }
 }
 
 
-
+// main class
 public class TechknowNotion {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+    // clear the console screen
     public static void clear() throws IOException, InterruptedException {
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
     }
 
+    //main menu
     public static void main2() throws IOException, InterruptedException {
         clear();
         System.out.println("\tTECHKNOW'S NOTION\n");
         System.out.println("1. Input Module Details\n2. View Modules\n3. Schedule Modules\n4. Get a Module\n5. Exit\n");
         while (true) {
             try {
-                System.out.print("Please enter a number:");
+                System.out.print("Please enter a number: ");
                 int choice = Integer.parseInt(br.readLine());
                 if (choice == 1) {
-                    input_module_details(); //done with bugs in exceptions
+                    input_module_details();
                 }
                 else if (choice == 2) {
-                    view_module(); //file handling
+                    view_module();
                 }
-                else if (choice == 3) {  //MARITHE - CURRENT //done in file handling but some errors in some functions
-                    schedule_module();   //is_not_empty
+                else if (choice == 3) {
+                    schedule_module();
                 }
-                else if (choice == 4) { //file handling
+                else if (choice == 4) {
                     get_a_module();
                 }
-                else if (choice == 5) { //done
+                else if (choice == 5) {
                     System.exit(0);
                 }
                 else {
-                    System.out.println("Input must be a positive integer and must be within the range.");
+                    System.out.println("Invalid input.");
                 }
-             }
+            }
             catch (InputMismatchException | NumberFormatException e) {
-                System.out.println("Input must be an integer from 1 to 5");
+                System.out.println("Invalid input.");
             }
         }
     }
 
-
+    // Menu 1
     static void input_module_details() throws IOException, InterruptedException {
-        // Goes to Menu 1
         clear();
         System.out.println("\tINPUT MODULE DETAILS\n");
         while (true) {
@@ -212,97 +249,72 @@ public class TechknowNotion {
             int tasks = p.input_validation("No. of Tasks: ");
             int priority = p.input_validation("Priority: ");
 
-            //read file; add to new list;
-            CSVReader cr = new CSVReader(new FileReader("all_modules.csv"));
-            ArrayList<String[]> first_list = new ArrayList<>();
-            String[] second_list;
-            while ((second_list = cr.readNext()) != null) {
-                first_list.add(second_list);
-            }
-            cr.close();
+            //read file all_modules then write the updated to same file
+            FileHandling.csvWriting("all_modules.csv",FileHandling.csvReading("all_modules.csv"),
+                    new String[]{module_name,type,String.valueOf(tasks), String.valueOf(priority)});
 
-            //write
-            CSVWriter cw = new CSVWriter(new FileWriter("all_modules.csv"));
-            first_list.add(new String[]{module_name,type,String.valueOf(tasks), String.valueOf(priority)});
-            cw.writeAll(first_list);
-            cw.close();
-
-            CSVReader cr2 = new CSVReader(new FileReader("queue.csv"));
-            ArrayList<String[]> first_list2 = new ArrayList<>();
-            String[] second_list2;
-            while ((second_list2 = cr2.readNext()) != null) {
-                first_list2.add(second_list2);
-            }
-            cr2.close();
-
-            //write
-            CSVWriter cw2 = new CSVWriter(new FileWriter("queue.csv"));
-            first_list2.add(new String[]{module_name,type,String.valueOf(tasks), String.valueOf(priority)});
-            cw2.writeAll(first_list2);
-            cw2.close();
+            //read file queue then write the updated to same file
+            FileHandling.csvWriting("queue.csv",FileHandling.csvReading("queue.csv"),
+                    new String[]{module_name,type,String.valueOf(tasks), String.valueOf(priority)});
 
             System.out.println("---Module Details Saved---");
-            //possible error
-            p.try_again("Make new module details?", "Invalid input", 1);
+            p.try_again("Make new module details?", "Invalid input.", 1);
         }
     }
 
-
+    // Menu 2
     static void view_module() throws IOException, InterruptedException{
         clear();
         System.out.println("\tVIEW MODULES\n");
         System.out.println("1. Completed Modules\n2. All Modules\n3. Go Back\n");
         while (true) {
             try {
-                System.out.println("Please enter a number: ");
+                System.out.print("Please enter a number: ");
                 int choice = Integer.parseInt(br.readLine());
-                if (choice < 1 && choice > 3) {   //same logic error nung sa schedule_modules
-                    System.out.println("Invalid input");
+                if (choice < 1 && choice > 3) {
+                    System.out.println("Invalid input.");
                 } else {
                     OtherFunctions p = new OtherFunctions();
+
                     if (choice == 1) {
                         clear();
                         System.out.println("\t\t\t\t\tVIEW MODULES");
                         System.out.println("\t\t\t\tLIST OF ALL COMPLETED MODULES\n");
+
                         if (p.is_empty("completed_modules.csv")) {
-                            CSVReader cr = new CSVReader(new FileReader("completed_modules.csv"));
-                            ArrayList<String[]> first_list2 = new ArrayList<>();
-                            String second_list2[];
-                            while ((second_list2 = cr.readNext()) != null) {
-                                first_list2.add(second_list2);
-                            }
-                            p.iteration(first_list2);
-                            cr.close();
+                            // reads completed_modules and adds to a list
+                            p.iteration(FileHandling.csvReading("completed_modules.csv"));
                             p.try_again("View module again?", "Invalid input.", 2);
                         } else {
                             System.out.println("\t\t\t\t   No completed module yet");
                             p.try_again("View module again?", "Invalid input.", 2);
                         }
-                    } else if (choice == 2){
+                    }
+
+                    else if (choice == 2){
                         clear();
                         System.out.println("\t\t\t\t\tVIEW MODULES");
                         System.out.println("\t\t\t\t\tALL MODULES\n");
                         if (p.is_empty("all_modules.csv")) {
-                            CSVReader cr = new CSVReader(new FileReader("all_modules.csv"));
-                            ArrayList<String[]> first_list2 = new ArrayList<>();
-                            String second_list2[];
-                            while ((second_list2 = cr.readNext()) != null) {
-                                first_list2.add(second_list2);
-                            }
-                            p.iteration(first_list2);
-                            cr.close();
+                            // reads all_modules and adds to a list
+                            p.iteration(FileHandling.csvReading("all_modules.csv"));
                             p.try_again("View module again?", "Invalid input.", 2);
                         } else {
                             System.out.println("\t\t\t\t\tNo module yet");
                             p.try_again("View module again?", "Invalid input.", 2);
                         }
-                    } else if (choice == 3){
+                    }
+
+                    else if (choice == 3){
                         main2();
                         p.restart();
                     }
+                    else {
+                        System.out.println("Invalid input.");
+                    }
                 }
             }
-            catch (InputMismatchException e) {
+            catch (InputMismatchException | NumberFormatException e) {
                 System.out.println("Invalid input.");
             }
             catch (FileNotFoundException e) {
@@ -319,29 +331,22 @@ public class TechknowNotion {
         System.out.println("1. View Updated Schedule of Techknow\n2. Go Back\n");
         while (true) {
             try {
-                System.out.println("Please enter a number: ");
+                System.out.print("Please enter a number: ");
                 int choice = Integer.parseInt(br.readLine());
                 //error
                 if ((choice  <1) && (choice > 2)) {
-                    System.out.println("Invalid input");
+                    System.out.println("Invalid input.");
                 } else {
                     if (choice == 1) {
                         clear();
                         System.out.println("\t\t\t\t\tSCHEDULE MODULES");
                         System.out.println("\t\t\t\t   CREATE SCHEDULE OF MODULES\n");
                         if (p.is_empty("queue.csv")) { // may error
-
-                            CSVReader cr = new CSVReader(new FileReader("queue.csv"));
-                            ArrayList<String[]> first_list = new ArrayList<>();
+                            List<String[]> first_list = FileHandling.csvReading("queue.csv");
                             List<Tasks> sort_list = new ArrayList<>();
                             List<String> indiv_list;
                             List<List<String>> collect_list = new ArrayList<>();
                             List<String[]> queue_list = new ArrayList<>();
-                            String second_list[];
-                            while ((second_list = cr.readNext()) != null) {
-                                first_list.add(second_list);
-                            }
-                            cr.close();
 
                             String[] split1,split2,split3,split4;
 
@@ -350,7 +355,7 @@ public class TechknowNotion {
                                 split2 = first_list.get(i)[1].split("\\t", 0);
                                 split3 = first_list.get(i)[2].split("\\t", 0);
                                 split4 = first_list.get(i)[3].split("\\t", 0);
-                                indiv_list = Arrays.asList(new String[]{split1[0],split2[0],split3[0],split4[0]});
+                                indiv_list = Arrays.asList(split1[0],split2[0],split3[0],split4[0]);
                                 collect_list.add(indiv_list);
                             }
 
@@ -360,39 +365,27 @@ public class TechknowNotion {
                                         Integer.parseInt(collect_list.get(i).get(2)),
                                         Integer.parseInt(collect_list.get(i).get(3))));
                             }
-
+                            //sorts list according to size and priority
                             Comparator<Tasks> comp = Comparator.comparing(Tasks::getNo_task);
                             Collections.sort(sort_list, comp);
                             Comparator<Tasks> comp2 = Comparator.comparing(Tasks::getPriority);
                             Collections.sort(sort_list, comp2);
 
-                            CSVWriter cw = new CSVWriter(new FileWriter("queue.csv"));
-                            queue_list.add(new String[]{"Modules","Type","No. of Tasks", "Priority"});
-                            for (int i = 0; i < sort_list.size(); i++) {
-                                queue_list.add(new String[]{sort_list.get(i).module_name, sort_list.get(i).type,
-                                        String.valueOf(sort_list.get(i).no_task), String.valueOf(sort_list.get(i).priority)});
-                            }
-                            cw.writeAll(queue_list);
-                            cw.close();
+                            FileHandling.csvWriting("queue.csv",queue_list,
+                                    new String[]{"Modules","Type","No. of Tasks", "Priority"},sort_list);
 
-                            CSVReader cr2 = new CSVReader(new FileReader("queue.csv"));
-                            ArrayList<String[]> first_list2 = new ArrayList<>();
-                            String second_list2[];
-                            while ((second_list2 = cr2.readNext()) != null) {
-                                first_list2.add(second_list2);
-                            }
-
-                            p.iteration(first_list2);
-                            cr2.close();
+                            p.iteration(FileHandling.csvReading("queue.csv"));
                             p.try_again("Go back to schedule module?", "Invalid input.", 3);
                         }
                     } else if (choice == 2){
                         main2();
                         p.restart();
+                    } else {
+                        System.out.println("Invalid input.");
                     }
                 }
             }
-            catch (InputMismatchException e) {
+            catch (InputMismatchException | NumberFormatException e) {
                 System.out.println("Invalid input.");
             }
             catch (FileNotFoundException e) {
@@ -405,56 +398,49 @@ public class TechknowNotion {
         OtherFunctions p = new OtherFunctions();
         clear();
         System.out.println("\t\t\t\t\tGET A MODULE\n");
-        int choice = 0;
-        try {
-            if (p.is_empty("queue.csv")) {
-                CSVReader cr = new CSVReader(new FileReader("queue.csv"));
-                ArrayList<String[]> first_list2 = new ArrayList<>();
-                ArrayList<String[]> collect_list2 = new ArrayList<>();
-                ArrayList<String[]> collect_list3 = new ArrayList<>();
-                String second_list2[];
-                while ((second_list2 = cr.readNext()) != null) {
-                    first_list2.add(second_list2);
-                }
-                cr.close();
-                p.iteration(first_list2);
-                while (true){
-                    System.out.println("Mark as complete the topmost module? YES(1) or NO(0): ");
+        int choice;
+        if (p.is_empty("queue.csv")) {
+            List<String[]> first_list = FileHandling.csvReading("queue.csv");
+            ArrayList<String[]> collect_list = new ArrayList<>();
+            ArrayList<String[]> collect_list2 = new ArrayList<>();
+
+            p.iteration(first_list);
+            while (true){
+                try {
+                    System.out.print("Mark as complete the topmost module? YES(1) or NO(0): ");
                     choice = Integer.parseInt(br.readLine());
-                    if (choice < 0 && choice > 1) {       //logic error
-                        System.out.println("Invalid input");
+                    if (choice < 0 && choice > 1) {
+                        System.out.println("Invalid input.");
                     } else {
                         if (choice == 1){  //writing to completed modules
-                            CSVWriter cw3 = new CSVWriter(new FileWriter("completed_modules.csv"));
-                            collect_list3.add(new String[]{"Modules","Type","No. of Tasks", "Priority"});
-                            collect_list3.add(first_list2.get(1));
-                            cw3.writeAll(collect_list3);
-                            cw3.close();
+                            collect_list2.addAll(FileHandling.csvReading("completed_modules.csv"));  // reads and adds all content of completed_modules in a list
+                            collect_list2.add(first_list.get(1)); // adds the topmost module of queue
+                            FileHandling.csvWriting("completed_modules.csv",collect_list2); // writes the entire list to completed_modules
 
-                            first_list2.remove(0);
-                            first_list2.remove(0);
-                            CSVWriter cw4 = new CSVWriter(new FileWriter("queue.csv"));
-                            collect_list2.add(new String[]{"Modules","Type","No. of Tasks", "Priority"});
-                            collect_list2.addAll(first_list2);
-                            cw4.writeAll(collect_list2);
-                            cw4.close();
+                            first_list.remove(0); // removes header
+                            first_list.remove(0); // removes topmost
 
+                            CSVWriter cw = new CSVWriter(new FileWriter("queue.csv"));
+                            collect_list.add(new String[]{"Modules","Type","No. of Tasks", "Priority"});
+                            collect_list.addAll(first_list);
+                            cw.writeAll(collect_list);
+                            cw.close();
+                            p.try_again("Get a module again?", "Invalid input.", 4);
                         } else if (choice == 0) {
                             p.restart();
+                        } else {
+                            System.out.println("Invalid input.");
                         }
-                        p.try_again("Get a module again?", "Invalid input.", 4);
                     }
+                } catch (IOException | NumberFormatException | InputMismatchException e) {
+                    System.out.println("Invalid Input.");
                 }
             }
-            else {
-                System.out.println("\t\tQueue is empty");
-                p.restart();
-            }
-
-        } catch (IOException | NumberFormatException | InputMismatchException e) { //Depnde sayo if ano exception lalagay mu
-            e.printStackTrace();
         }
-
+        else {
+            System.out.println("\t\tQueue is empty");
+            p.restart();
+        }
     }
 
     static void make_csv_files() throws IOException {
@@ -481,19 +467,8 @@ public class TechknowNotion {
     }
 
 
-    public static void main(String args[]) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         make_csv_files();
         main2();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
