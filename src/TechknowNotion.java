@@ -77,8 +77,7 @@ class OtherFunctions {
 
     // iterates through the list
     void iteration(List<String[]> ln) {
-        String format = "%1$-30s%2$-15s%3$-15s%4$-10s\n";
-        System.out.format(format,"Modules","Type","No. of Tasks","Priority");
+        System.out.format("%1$-30s%2$-15s%3$-15s%4$-10s\n","Modules","Type","No. of Tasks","Priority");
         for (int x = 0; x < ln.size(); x++) { // iterate per row
             List<Object> list4;
             if (x == 0) {
@@ -108,6 +107,7 @@ class OtherFunctions {
     void try_again(String ques, String msg, int loc){
         while (true){
             try {
+                System.out.println();
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 System.out.printf("%s YES(1) or NO(0): ", ques);
                 int choice = Integer.parseInt(br.readLine());
@@ -287,8 +287,8 @@ public class TechknowNotion {
 
                     if (choice == 1) {
                         System.out.println();
-                        System.out.println("\t\t\t\t\tVIEW MODULES");
-                        System.out.println("\t\t\t\tLIST OF ALL COMPLETED MODULES\n");
+                        System.out.println("\t\t\t\t\t\t\tVIEW MODULES");
+                        System.out.println("\t\t\t\t\tLIST OF ALL COMPLETED MODULES\n");
 
                         if (p.is_empty("completed_modules.csv")) {
                             // reads completed_modules and adds to a list
@@ -302,8 +302,8 @@ public class TechknowNotion {
 
                     else if (choice == 2){
                         System.out.println();
-                        System.out.println("\t\t\t\t\tVIEW MODULES");
-                        System.out.println("\t\t\t\t\tALL MODULES\n");
+                        System.out.println("\t\t\t\t\t\t\tVIEW MODULES");
+                        System.out.println("\t\t\t\t\t\t\tALL MODULES\n");
                         if (p.is_empty("all_modules.csv")) {
                             // reads all_modules and adds to a list
                             p.iteration(FileHandling.csvReading("all_modules.csv"));
@@ -336,7 +336,7 @@ public class TechknowNotion {
         // Goes to menu 3
         System.out.println();
         OtherFunctions p = new OtherFunctions();
-        System.out.println("\tSCHEDULE MODULES\n");
+        System.out.println("\t\t  SCHEDULE MODULES\n");
         System.out.println("1. View Updated Schedule of Techknow\n2. Go Back\n");
         while (true) {
             try {
@@ -348,7 +348,7 @@ public class TechknowNotion {
                 } else {
                     if (choice == 1) {
                         System.out.println();
-                        System.out.println("\t\t\t\t\tSCHEDULE MODULES");
+                        System.out.println("\t\t\t\t\t\tSCHEDULE MODULES");
                         System.out.println("\t\t\t\t   CREATE SCHEDULE OF MODULES\n");
                         if (p.is_empty("queue.csv")) { // may error
                             List<String[]> first_list = FileHandling.csvReading("queue.csv");
@@ -406,7 +406,7 @@ public class TechknowNotion {
     static void get_a_module() throws IOException, InterruptedException {
         OtherFunctions p = new OtherFunctions();
         System.out.println();
-        System.out.println("\t\t\t\t\tGET A MODULE\n");
+        System.out.println("\t\t\t\t\t\t  GET A MODULE\n");
         int choice;
         if (p.is_empty("queue.csv")) {
             List<String[]> first_list = FileHandling.csvReading("queue.csv");
@@ -416,6 +416,7 @@ public class TechknowNotion {
             p.iteration(first_list);
             while (true){
                 try {
+                    System.out.println();
                     System.out.print("Mark as complete the topmost module? YES(1) or NO(0): ");
                     choice = Integer.parseInt(br.readLine());
                     if (choice < 0 && choice > 1) {
