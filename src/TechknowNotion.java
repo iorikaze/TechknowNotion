@@ -9,26 +9,6 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 
-// class for displaying
-class Preview {
-
-    public List<Object> lst1;
-
-    public Preview(List<Object> lst1) {
-        this.lst1 = lst1;
-    }
-
-    void set_view(ArrayList<Object> lst1) {
-        this.lst1 = lst1;
-    }
-
-    //displays the list
-    void view2() {
-        String format = "%1$-30s%2$-15s%3$-15s%4$-10s\n";
-        System.out.format(format, this.lst1.get(0), this.lst1.get(1), this.lst1.get(2), this.lst1.get(3));
-    }
-}
-
 class FileHandling {
 
     static List<String[]> csvReading(String filename) throws IOException {
@@ -87,8 +67,8 @@ class OtherFunctions {
                 continue; // skip header
             } else {
                 list4 = Arrays.asList(ln.get(x));
-                Preview i = new Preview(list4);
-                i.view2();
+                String format = "%1$-30s%2$-15s%3$-15s%4$-10s\n";
+                System.out.format(format, list4.get(0), list4.get(1), list4.get(2), list4.get(3));
             }
         }
     }
