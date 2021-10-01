@@ -1,8 +1,12 @@
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
+import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 // class for displaying
 class Preview {
@@ -18,8 +22,8 @@ class Preview {
 
     //displays the list
     void view2() {
-        System.out.println(this.lst1.get(0) + "\t       " + this.lst1.get(1) +
-                "\t\t\t   " + this.lst1.get(2) + "\t\t\t\t  " + this.lst1.get(3));
+        String format = "%1$-30s%2$-15s%3$-15s%4$-10s\n";
+        System.out.format(format, this.lst1.get(0), this.lst1.get(1), this.lst1.get(2), this.lst1.get(3));
     }
 }
 
@@ -73,7 +77,8 @@ class OtherFunctions {
 
     // iterates through the list
     void iteration(List<String[]> ln) {
-        System.out.println("Modules\t\t\tType\t\t\tNo. of Tasks\t\t\tPriority");
+        String format = "%1$-30s%2$-15s%3$-15s%4$-10s\n";
+        System.out.format(format,"Modules","Type","No. of Tasks","Priority");
         for (int x = 0; x < ln.size(); x++) { // iterate per row
             List<Object> list4;
             if (x == 0) {
@@ -205,14 +210,9 @@ class Tasks {
 public class TechknowNotion {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    // clear the console screen
-    public static void clear() throws IOException, InterruptedException {
-        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-    }
-
     //main menu
     public static void main2() throws IOException, InterruptedException {
-        clear();
+        System.out.println();
         System.out.println("\tTECHKNOW'S NOTION\n");
         System.out.println("1. Input Module Details\n2. View Modules\n3. Schedule Modules\n4. Get a Module\n5. Exit\n");
         while (true) {
@@ -246,7 +246,7 @@ public class TechknowNotion {
 
     // Menu 1
     static void input_module_details() throws IOException, InterruptedException {
-        clear();
+        System.out.println();
         System.out.println("\tINPUT MODULE DETAILS\n");
         while (true) {
             OtherFunctions p = new OtherFunctions();
@@ -273,7 +273,7 @@ public class TechknowNotion {
 
     // Menu 2
     static void view_module() throws IOException, InterruptedException{
-        clear();
+        System.out.println();
         System.out.println("\tVIEW MODULES\n");
         System.out.println("1. Completed Modules\n2. All Modules\n3. Go Back\n");
         while (true) {
@@ -286,7 +286,7 @@ public class TechknowNotion {
                     OtherFunctions p = new OtherFunctions();
 
                     if (choice == 1) {
-                        clear();
+                        System.out.println();
                         System.out.println("\t\t\t\t\tVIEW MODULES");
                         System.out.println("\t\t\t\tLIST OF ALL COMPLETED MODULES\n");
 
@@ -301,7 +301,7 @@ public class TechknowNotion {
                     }
 
                     else if (choice == 2){
-                        clear();
+                        System.out.println();
                         System.out.println("\t\t\t\t\tVIEW MODULES");
                         System.out.println("\t\t\t\t\tALL MODULES\n");
                         if (p.is_empty("all_modules.csv")) {
@@ -334,7 +334,7 @@ public class TechknowNotion {
 
     static void schedule_module() throws IOException, InterruptedException {
         // Goes to menu 3
-        clear();
+        System.out.println();
         OtherFunctions p = new OtherFunctions();
         System.out.println("\tSCHEDULE MODULES\n");
         System.out.println("1. View Updated Schedule of Techknow\n2. Go Back\n");
@@ -347,7 +347,7 @@ public class TechknowNotion {
                     System.out.println("Invalid input.");
                 } else {
                     if (choice == 1) {
-                        clear();
+                        System.out.println();
                         System.out.println("\t\t\t\t\tSCHEDULE MODULES");
                         System.out.println("\t\t\t\t   CREATE SCHEDULE OF MODULES\n");
                         if (p.is_empty("queue.csv")) { // may error
@@ -405,7 +405,7 @@ public class TechknowNotion {
 
     static void get_a_module() throws IOException, InterruptedException {
         OtherFunctions p = new OtherFunctions();
-        clear();
+        System.out.println();
         System.out.println("\t\t\t\t\tGET A MODULE\n");
         int choice;
         if (p.is_empty("queue.csv")) {

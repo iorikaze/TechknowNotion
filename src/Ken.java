@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class Ken {
-    public static class Tasks {
+   /* public static class Tasks {
         String module_name;
         String type;
         int no_task;
@@ -34,9 +34,9 @@ public class Ken {
         public String toString() {
             return "Tasks [module name=" + module_name + ", type=" + type + ", no. of task=" + no_task + ", priority= " + priority + "]";
         }
-    }
-    public static void main(String[] args) throws IOException{
-        ArrayList<List<Tasks>> first_list = new ArrayList<>();
+    }*/
+    public static void main(String[] args){
+        /*ArrayList<List<Tasks>> first_list = new ArrayList<>();
         List<Tasks> second_list = new ArrayList<>();
 
         second_list.add(new Tasks("Ken","Epic",2,1));
@@ -55,11 +55,11 @@ public class Ken {
         System.out.println(second_list.get(0));
 
         CSVWriter writer = new CSVWriter(new FileWriter("ken.csv"));
-        /*List<String[]> data = new ArrayList<String[]>();
+        *//*List<String[]> data = new ArrayList<String[]>();
         data.add(new String[] { "Name", "Class", "Marks" });
         data.add(new String[] { "Ken", "10", "620" });
         data.add(new String[] { "Suraj", "10", "630" });
-        writer.writeAll(data);*/
+        writer.writeAll(data);*//*
         String[] data2 = { "pia", "10", "630" };
         String[] data3 = { "case", "10", "630" };
         writer.writeNext(data2);
@@ -81,6 +81,10 @@ public class Ken {
                 System.out.println();
             }
         }
-
+*/
+        String format = "|%1$-30s|%2$-10s|%3$-20s|\n";
+        System.out.format(format, "Adklasjdklasjddsakldkasld", "AA", "AAA");
+        System.out.format(format, "B", "", "BBBBB");
+        System.out.format(format, "C", "CCCCC", "CCCCCCCC");
     }
 }
