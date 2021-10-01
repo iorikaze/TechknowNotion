@@ -181,7 +181,7 @@ class OtherFunctions {
                 System.out.print(x);
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 String i = br.readLine();
-                if (i.equals("")) {
+                if (i.isEmpty()) {
                     System.out.println("Invalid input.\n");
                 } else {
                     return i;
