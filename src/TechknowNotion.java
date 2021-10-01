@@ -251,23 +251,33 @@ public class TechknowNotion {
         while (true) {
             OtherFunctions p = new OtherFunctions();
             System.out.print("Modules: ");
-
+            List<String> verify_list = new ArrayList<>();
             String module_name = br.readLine();
             System.out.print("Type: ");
             String type = br.readLine();
             int tasks = p.input_validation("No. of Tasks: ");
             int priority = p.input_validation("Priority: ");
 
-            //read file all_modules then write the updated to same file
-            FileHandling.csvWriting("all_modules.csv",FileHandling.csvReading("all_modules.csv"),
-                    new String[]{module_name,type,String.valueOf(tasks), String.valueOf(priority)});
+            for  (int i = 1; i < FileHandling.csvReading("all_modules.csv").size(); i++) {
+                verify_list.add(FileHandling.csvReading("all_modules.csv").get(i)[0]);
+            }
 
-            //read file queue then write the updated to same file
-            FileHandling.csvWriting("queue.csv",FileHandling.csvReading("queue.csv"),
-                    new String[]{module_name,type,String.valueOf(tasks), String.valueOf(priority)});
+            if (verify_list.contains(module_name)) {
+                System.out.println("\n Module Exists \n");
+            }
+            else {
+                System.out.println("hello");
+                //read file all_modules then write the updated to same file
+                FileHandling.csvWriting("all_modules.csv",FileHandling.csvReading("all_modules.csv"),
+                        new String[]{module_name,type,String.valueOf(tasks), String.valueOf(priority)});
 
-            System.out.println("---Module Details Saved---");
-            p.try_again("Make new module details?", "Invalid input.", 1);
+                //read file queue then write the updated to same file
+                FileHandling.csvWriting("queue.csv",FileHandling.csvReading("queue.csv"),
+                        new String[]{module_name,type,String.valueOf(tasks), String.valueOf(priority)});
+
+                System.out.println("---Module Details Saved---");
+                p.try_again("Make new module details?", "Invalid input.", 1);
+            }
         }
     }
 
