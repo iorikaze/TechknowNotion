@@ -337,7 +337,7 @@ public class TechknowNotion {
         System.out.println();
         OtherFunctions p = new OtherFunctions();
         System.out.println("\t\t  SCHEDULE MODULES\n");
-        System.out.println("1. View Updated Schedule of Techknow\n2. Go Back\n");
+        System.out.println("1. View Updated Schedule\n2. Go Back\n");
         while (true) {
             try {
                 System.out.print("Please enter a number: ");
