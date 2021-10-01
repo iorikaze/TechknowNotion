@@ -60,14 +60,14 @@ class OtherFunctions {
 
     // iterates through the list
     void iteration(List<String[]> ln) {
-        System.out.format("%1$-30s%2$-15s%3$-15s%4$-10s\n", "Modules", "Type", "No. of Tasks", "Priority");
+        String format = "%1$-30s%2$-15s%3$-15s%4$-10s\n";
+        System.out.format(format, "Modules", "Type", "No. of Tasks", "Priority");
         for (int x = 0; x < ln.size(); x++) { // iterate per row
             List<Object> list4;
             if (x == 0) {
                 continue; // skip header
             } else {
                 list4 = Arrays.asList(ln.get(x));
-                String format = "%1$-30s%2$-15s%3$-15s%4$-10s\n";
                 System.out.format(format, list4.get(0), list4.get(1), list4.get(2), list4.get(3));
             }
         }
